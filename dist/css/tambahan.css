@@ -1,0 +1,22 @@
+.bingkai i.blue {
+    background-color: #266ff6;
+}
+.bingkai i.red {
+    background-color: #D53540;
+}
+.bingkai i.green {
+    background-color: #679047;
+}
+.bingkai i.yellow {
+    background-color: #fc9708;
+}
+.bingkai i {
+    float: left;
+    width: 33%;
+    height: 5px;
+}
+.bingkai {
+    margin: 0px;
+    padding: 0px;
+	width:100%;
+}
