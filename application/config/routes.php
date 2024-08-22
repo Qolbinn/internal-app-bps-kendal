@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -52,3 +52,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'dashboard';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['kegiatan/distribusi'] = 'kegiatan/index/distribusi';
+$route['kegiatan/sosial'] = 'kegiatan/index/sosial';
+$route['kegiatan/ipds'] = 'kegiatan/index/ipds';
+$route['kegiatan/neraca'] = 'kegiatan/index/neraca';
+$route['kegiatan/tata-usaha'] = 'kegiatan/index/tata-usaha';
+$route['kegiatan/produksi'] = 'kegiatan/index/produksi';
+
+$route['kegiatan/load_table'] = 'kegiatan/load_table';

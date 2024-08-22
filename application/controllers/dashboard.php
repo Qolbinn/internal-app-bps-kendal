@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class dashboard extends CI_Controller {
+class dashboard extends CI_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -19,11 +20,11 @@ class dashboard extends CI_Controller {
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
 	public function __construct()
-    {  
-        parent::__construct();
+	{
+		parent::__construct();
 		include FCPATH . '/config/variabel.php';
-        
-        $_SESSION['username'] 		= "Angga";
+
+		$_SESSION['username'] 		= "Angga";
 		$_SESSION['foto']     		= "dist/img/foto/nofoto.jpg";
 		$_SESSION['nama']    	 	= "Angga Al Refai P";
 		$_SESSION['nip']  			= "198710102010121008";
@@ -34,19 +35,19 @@ class dashboard extends CI_Controller {
 		$_SESSION['level'][$this->data['aplikasi']] = 'admin';
 		$_SESSION['jabfung']		= "prakom";
 
-        $this->load->model('dashboard_model', 'dashboard');
-        //$this->load->library('Pdf');
-    }
-	
+		$this->load->model('dashboard_model', 'dashboard');
+		//$this->load->library('Pdf');
+	}
+
 	public function index()
 	{
 		//Data Awal
 		$data 			= $this->data;
 		$data['modul']	= "dashboard";
 		$data['act']	= "";
-		
+
 		//Masukkan Script Tambahan
-		
+
 		//Memanggil view
 		$this->load->view('frame', $data);
 	}
