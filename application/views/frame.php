@@ -137,11 +137,42 @@ to get the desired effect
 
 	<!-- OPTIONAL SCRIPTS -->
 	<?php
-	if (file_exists(FCPATH . '/application/views/modul_js/' . $modul . '.php'))
+	if (file_exists(FCPATH . '/application/views/modul_js/' . $modul . '.php')) {
 		include "modul_js/" . $modul . ".php";
-	else
-		include "modul_js/default.php";
+	}
+	include "modul_js/default.php";
 	?>
+
+	<?php if ($this->session->flashdata('success')): ?>
+		<script>
+			Swal.fire({
+				icon: 'success',
+				title: 'Success!',
+				text: '<?= $this->session->flashdata('success'); ?>',
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true
+			});
+		</script>
+	<?php endif; ?>
+
+	<?php if ($this->session->flashdata('warning')): ?>
+		<script>
+			Swal.fire({
+				icon: 'warning',
+				title: 'Warning!',
+				text: '<?= $this->session->flashdata('warning'); ?>',
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true
+			});
+		</script>
+	<?php endif; ?>
+
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Proyek_model extends CI_Model
+class MasterProyek_model extends CI_Model
 {
 
     public function __construct()
@@ -13,17 +13,21 @@ class Proyek_model extends CI_Model
     public function get_data($id = NULL)
     {
         if ($id === NULL) {
-            $query = $this->db->get('proyek_tim');
+            $query = $this->db->get('master_proyek');
             return $query->result();
         } else {
-            $query = $this->db->get_where('proyek_tim', array('id' => $id));
+            $query = $this->db->get_where('master_proyek', array('id' => $id));
             return $query->row();
         }
     }
 
-    public function get_proyek_tim($id_tim)
+    public function get_data_by_bidang($bidang)
     {
-        $query = $this->db->get_where('proyek_tim', array('id_tim' => $id_tim));
+        $this->db->select("id, nama_proyek");
+        $this->db->from("master_proyek");
+        $this->db->where('bidang', $bidang);
+        $query = $this->db->get();
+
         if ($query->num_rows() > 0) {
             return $query->result();
         } else {
@@ -33,22 +37,18 @@ class Proyek_model extends CI_Model
 
     public function insert_data($data)
     {
-        if ($this->db->insert('proyek_tim', $data)) {
-            return $this->db->insert_id();
-        } else {
-            return null;
-        }
+        return $this->db->insert('master_proyek', $data);
     }
 
     public function update_data($id, $data)
     {
         $this->db->where('id', $id);
-        return $this->db->update('proyek_tim', $data);
+        return $this->db->update('master_proyek', $data);
     }
 
     public function delete_data($id)
     {
         $this->db->where('id', $id);
-        return $this->db->delete('proyek_tim');
+        return $this->db->delete('master_proyek');
     }
 }

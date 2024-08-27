@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <?php foreach ($dt_proyek as $proyek) : ?>
-            <tr class="tr-proyek" data-id_proyek="<?= $proyek->id; ?>" data-nama_proyek="<?= $proyek->nama_proyek; ?>">
+            <tr>
                 <td><?= $proyek->id; ?></td>
                 <td><?= $proyek->nama_proyek ?></td>
                 <td><?= $proyek->start_date ?></td>
@@ -32,6 +32,9 @@
                         </div>
                         <div class="btn btn-warning">
                             <i class="fa fa-edit" aria-hidden="true"></i>
+                        </div>
+                        <div class="tr-proyek btn btn-outline-success" data-id_proyek="<?= $proyek->id; ?>" data-nama_proyek="<?= $proyek->nama_proyek; ?>">
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                         </div>
                     </div>
                 </td>

@@ -60,4 +60,13 @@ $route['kegiatan/neraca'] = 'kegiatan/index/neraca';
 $route['kegiatan/tata-usaha'] = 'kegiatan/index/tata-usaha';
 $route['kegiatan/produksi'] = 'kegiatan/index/produksi';
 
-$route['kegiatan/load_table'] = 'kegiatan/load_table';
+$route['kegiatan/distribusi/(:any)'] = 'kegiatan/index/distribusi/$1';
+$route['kegiatan/sosial/(:any)'] = 'kegiatan/index/sosial/$1';
+$route['kegiatan/ipds/(:any)'] = 'kegiatan/index/ipds/$1';
+$route['kegiatan/neraca/(:any)'] = 'kegiatan/index/neraca/$1';
+$route['kegiatan/tata-usaha/(:any)'] = 'kegiatan/index/tata-usaha/$1';
+$route['kegiatan/produksi/(:any)'] = 'kegiatan/index/produksi/$1';
+
+$route['tambah_anggota_tim/(:any)'] = 'TimController/tambah_anggota/$1';
+$route['hapus_anggota_tim/(:any)'] = 'TimController/delete_anggota/$1';
+$route['proyek/tambah/(:any)'] = 'ProyekController/tambah_proyek/$1';

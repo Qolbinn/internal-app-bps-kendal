@@ -32,6 +32,17 @@ class Tim_model extends CI_Model
         }
     }
 
+    public function get_by_name($name)
+    {
+        $query = $this->db->get_where('tim', array('nama_tim' => $name));
+
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return null;
+        }
+    }
+
     public function insert_data($data)
     {
         return $this->db->insert('tim', $data);
