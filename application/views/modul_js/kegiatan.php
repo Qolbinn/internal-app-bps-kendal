@@ -35,6 +35,27 @@
                 },
                 success: function(response) {
                     $('.kegiatan-table').html(response);
+                    $('.select2').select2();
+                    // Datepicker Tambah Kegiatan
+                    $('#start-date-kegiatan').datetimepicker({
+                        format: 'YYYY-MM-DD'
+                    });
+                    $('#end-date-kegiatan').datetimepicker({
+                        format: 'YYYY-MM-DD'
+                    });
+                    if ($.fn.DataTable.isDataTable('#dataTable-kegiatan')) {
+                        $('#dataTable-kegiatan').DataTable().destroy();
+                    }
+
+                    // Inisialisasi ulang DataTables setelah konten tabel dimuat
+                    $('#dataTable-kegiatan').DataTable({
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": true,
+                        "ordering": true,
+                        "info": false,
+                        "autoWidth": true
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -61,6 +82,19 @@
                 },
                 success: function(response) {
                     $('.pekerjaan-table').html(response);
+                    if ($.fn.DataTable.isDataTable('#dataTable-pekerjaan')) {
+                        $('#dataTable-pekerjaan').DataTable().destroy();
+                    }
+
+                    // Inisialisasi ulang DataTables setelah konten tabel dimuat
+                    $('#dataTable-pekerjaan').DataTable({
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": true,
+                        "ordering": true,
+                        "info": false,
+                        "autoWidth": true
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -151,11 +185,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="indikator_kinerja-` + kegiatanIndex + `">Indikator Kinerja Utama</label>
+                    <label for="indikator_kinerja-` + kegiatanIndex + `">Indikator Kinerja Kegiatan</label>
                     <select name="indikator_kinerja-` + kegiatanIndex + `" class="form-control select2" style="width: 100%; height: 100px;" required>
                         <option selected="selected" value=""></option>
-                        <?php foreach ($master_kegiatan as $kegiatan) : ?>
-                            <option value="<?= urlencode($kegiatan->id) ?>"><?= $kegiatan->nama_kegiatan ?></option>
+                        <?php foreach ($indikator_kinerja as $indikator) : ?>
+                            <option value="<?= urlencode($indikator->id) ?>">
+                                <?= $indikator->kode . ' - ' . $indikator->jenis . ' - ' . $indikator->indikator ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -206,7 +242,7 @@
         function updateNamaAkhirProyek() {
             var selectedProyek = $('select[name="master_proyek"] option:selected').text();
             var detailProyek = $('input[name="detail_proyek"]').val().trim();
-            var namaAkhir = selectedProyek + ' ' + detailProyek;
+            var namaAkhir = selectedProyek + ' ~ ' + detailProyek;
 
             $('.nama-akhir-proyek').text(namaAkhir);
 
@@ -216,6 +252,161 @@
 
         $('select[name="master_proyek"]').on('change', updateNamaAkhirProyek);
         $('input[name="detail_proyek"]').on('input', updateNamaAkhirProyek);
+
+
+        // Ajax untuk modal edit proyek
+        $('.btn-edit-proyek').on('click', function() {
+            var id_proyek = $(this).data('id_proyek');
+            console.log(id_proyek);
+
+            $.ajax({
+                url: '<?= base_url('proyek/show') ?>/' + id_proyek,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Isi data modal dengan data yang di-fetch
+                    var namaProyekParts = data.nama_proyek.split(' ~ ');
+                    console.log(data);
+                    $('#modal-update-proyek input[name="master_proyek"]').val(namaProyekParts[0]);
+                    $('#modal-update-proyek input[name="detail_proyek"]').val(namaProyekParts[1] || '');
+                    $('#modal-update-proyek input[name="start_proyek"]').val(data.start_date);
+                    $('#modal-update-proyek input[name="end_proyek"]').val(data.end_date);
+                    $('#modal-update-proyek input[name="nama_akhir_proyek"]').val(data.nama_proyek);
+                    $('#modal-update-proyek select[name="status_proyek"]').val(data.status);
+                    // Tampilkan modal
+                    $('#modal-update-proyek').modal('show');
+                }
+            });
+        });
+
+
+        // Add pekerjaan pegawai pada saat add kegiatan baru
+        $(document).on('click', '#tambah-pegawai-kegiatan', function() {
+            // Elemen HTML yang akan di-append
+            var pegawaiKegiatanIndex = $('.item-pegawai-kegiatan').length + 1;
+            var newItem = `
+            <div class="item-pegawai-kegiatan mr-2">
+                <h5 class="text-primary font-weight-bold">Pegawai ke-` + pegawaiKegiatanIndex + `</h5>
+                <input type="hidden" name="pegawaiKegiatanIndex[]" value="` + pegawaiKegiatanIndex + `" required>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="pegawai_pekerjaan-` + pegawaiKegiatanIndex + `">Pegawai</label>
+                            <select name="pegawai_pekerjaan-` + pegawaiKegiatanIndex + `" class="form-control select2" style="width: 100%; height: 100px;" required>
+                                <option selected="selected" value=""></option>
+                                <?php foreach ($pegawai as $pgw) : ?>
+                                    <option value="<?= urlencode($pgw->nama) ?>"><?= $pgw->nama ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="master_satuan-` + pegawaiKegiatanIndex + `">Jenis Satuan</label>
+                            <select name="master_satuan-` + pegawaiKegiatanIndex + `" class="form-control select2" style="width: 100%; height: 100px;" required>
+                                <option value="" selected></option>
+                                <?php foreach ($master_satuan as $satuan) : ?>
+                                    <option value="<?= urlencode($satuan->id) ?>"><?= $satuan->nama_satuan ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="target_pekerjaan-` + pegawaiKegiatanIndex + `">Jumlah target_pekerjaan</label>
+                            <input type="number" name="target_pekerjaan-` + pegawaiKegiatanIndex + `" class="form-control" placeholder="Detail proyek" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                <button type="button" class="btn btn-danger btn-hapus-pegawai-kegiatan">Hapus</button>
+                <hr>
+                </div>
+            </div>
+            `;
+
+            $('.container-pegawai-kegiatan').append(newItem);
+            $('.select2').select2();
+
+        });
+
+        // Menghapus field kegiatan proyek secara dinamis saat menambah proyek baru
+        $(document).on('click', '.btn-hapus-pegawai-kegiatan', function() {
+            $(this).closest('.item-pegawai-kegiatan').remove();
+
+            // Update index kegiatan setelah salah satu dihapus
+            $('.item-pegawai-kegiatan').each(function(index) {
+                var pegawaiKegiatanIndex = index + 1; // Mulai dari 1
+                $(this).find('h5').text('Pegawai ke-' + pegawaiKegiatanIndex);
+                $(this).find('select[name^="pegawai_pekerjaan"]').attr('name', 'pegawai_pekerjaan-' + pegawaiKegiatanIndex);
+                $(this).find('select[name^="master_satuan"]').attr('name', 'master_satuan-' + pegawaiKegiatanIndex);
+                $(this).find('input[name^="target_pekerjaan"]').attr('name', 'target_pekerjaan-' + pegawaiKegiatanIndex);
+            });
+        });
+
+        // Add pekerjaan baru
+        $(document).on('click', '#tambah-pekerjaan-pegawai', function() {
+            // Elemen HTML yang akan di-append
+            var pekerjaanPegawaiIndex = $('.item-pekerjaan-pegawai').length + 1;
+            var newItem = `
+            <div class="item-pekerjaan-pegawai mr-2">
+                <h5 class="text-primary font-weight-bold">Pegawai ke-` + pekerjaanPegawaiIndex + `</h5>
+                <input type="hidden" name="pekerjaanPegawaiIndex[]" value="` + pekerjaanPegawaiIndex + `" required>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="pekerjaan_pegawai-` + pekerjaanPegawaiIndex + `">Pegawai</label>
+                            <select name="pekerjaan_pegawai-` + pekerjaanPegawaiIndex + `" class="form-control select2" style="width: 100%; height: 100px;" required>
+                                <option selected="selected" value=""></option>
+                                <?php foreach ($pegawai as $pgw) : ?>
+                                    <option value="<?= urlencode($pgw->nama) ?>"><?= $pgw->nama ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="pekerjaan_satuan-` + pekerjaanPegawaiIndex + `">Jenis Satuan</label>
+                            <select name="pekerjaan_satuan-` + pekerjaanPegawaiIndex + `" class="form-control select2" style="width: 100%; height: 100px;" required>
+                                <option value="" selected></option>
+                                <?php foreach ($master_satuan as $satuan) : ?>
+                                    <option value="<?= urlencode($satuan->id) ?>"><?= $satuan->nama_satuan ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="pekerjaan_target-` + pekerjaanPegawaiIndex + `">Jumlah </label>
+                            <input type="number" name="pekerjaan_target-` + pekerjaanPegawaiIndex + `" class="form-control" placeholder="Detail proyek" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                <button type="button" class="btn btn-danger btn-hapus-pekerjaan-pegawai">Hapus</button>
+                <hr>
+                </div>
+            </div>
+            `;
+
+            $('.container-pekerjaan-pegawai').append(newItem);
+            $('.select2').select2();
+
+        });
+
+        // Menghapus field kegiatan proyek secara dinamis saat menambah proyek baru
+        $(document).on('click', '.btn-hapus-pekerjaan-pegawai', function() {
+            $(this).closest('.item-pekerjaan-pegawai').remove();
+
+            // Update index kegiatan setelah salah satu dihapus
+            $('.item-pekerjaan-pegawai').each(function(index) {
+                var pekerjaanPegawaiIndex = index + 1; // Mulai dari 1
+                $(this).find('h5').text('Pegawai ke-' + pekerjaanPegawaiIndex);
+                $(this).find('select[name^="pekerjaan_pegawai"]').attr('name', 'pekerjaan_pegawai-' + pekerjaanPegawaiIndex);
+                $(this).find('select[name^="pekerjaan_satuan"]').attr('name', 'pekerjaan_satuan-' + pekerjaanPegawaiIndex);
+                $(this).find('input[name^="pekerjaan_target"]').attr('name', 'pekerjaan_target-' + pekerjaanPegawaiIndex);
+            });
+        });
 
 
     });

@@ -13,10 +13,10 @@ class Pekerjaan_model extends CI_Model
     public function get_data($id = NULL)
     {
         if ($id === NULL) {
-            $query = $this->db->get('model');
+            $query = $this->db->get('pekerjaan');
             return $query->result();
         } else {
-            $query = $this->db->get_where('model', array('id' => $id));
+            $query = $this->db->get_where('pekerjaan', array('id' => $id));
             return $query->row();
         }
     }
@@ -35,18 +35,18 @@ class Pekerjaan_model extends CI_Model
 
     public function insert_data($data)
     {
-        return $this->db->insert('model', $data);
+        return $this->db->insert('pekerjaan', $data);
     }
 
     public function update_data($id, $data)
     {
         $this->db->where('id', $id);
-        return $this->db->update('model', $data);
+        return $this->db->update('pekerjaan', $data);
     }
 
     public function delete_data($id)
     {
         $this->db->where('id', $id);
-        return $this->db->delete('model');
+        return $this->db->delete('pekerjaan');
     }
 }

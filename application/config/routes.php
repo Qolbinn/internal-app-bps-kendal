@@ -60,13 +60,24 @@ $route['kegiatan/neraca'] = 'kegiatan/index/neraca';
 $route['kegiatan/tata-usaha'] = 'kegiatan/index/tata-usaha';
 $route['kegiatan/produksi'] = 'kegiatan/index/produksi';
 
-$route['kegiatan/distribusi/(:any)'] = 'kegiatan/index/distribusi/$1';
-$route['kegiatan/sosial/(:any)'] = 'kegiatan/index/sosial/$1';
-$route['kegiatan/ipds/(:any)'] = 'kegiatan/index/ipds/$1';
-$route['kegiatan/neraca/(:any)'] = 'kegiatan/index/neraca/$1';
-$route['kegiatan/tata-usaha/(:any)'] = 'kegiatan/index/tata-usaha/$1';
-$route['kegiatan/produksi/(:any)'] = 'kegiatan/index/produksi/$1';
+// $route['kegiatan/distribusi/(:any)'] = 'kegiatan/index/distribusi/$1';
+// $route['kegiatan/sosial/(:any)'] = 'kegiatan/index/sosial/$1';
+// $route['kegiatan/ipds/(:any)'] = 'kegiatan/index/ipds/$1';
+// $route['kegiatan/neraca/(:any)'] = 'kegiatan/index/neraca/$1';
+// $route['kegiatan/tata-usaha/(:any)'] = 'kegiatan/index/tata-usaha/$1';
+// $route['kegiatan/produksi/(:any)'] = 'kegiatan/index/produksi/$1';
 
 $route['tambah_anggota_tim/(:any)'] = 'TimController/tambah_anggota/$1';
 $route['hapus_anggota_tim/(:any)'] = 'TimController/delete_anggota/$1';
 $route['proyek/tambah/(:any)'] = 'ProyekController/tambah_proyek/$1';
+$route['proyek/show/(:any)'] = 'ProyekController/get_data_proyek_by_id/$1';
+$route['proyek/hapus/(:any)'] = 'ProyekController/delete_proyek/$1';
+$route['kegiatan_proyek/tambah/(:any)'] = 'KegiatanController/tambah_kegiatan/$1';
+$route['kegiatan_proyek/hapus/(:any)'] = 'KegiatanController/delete_kegiatan/$1';
+$route['pekerjaan/tambah/(:any)'] = 'PekerjaanController/tambah_pekerjaan/$1';
+$route['pekerjaan/hapus/(:any)'] = 'PekerjaanController/delete_pekerjaan/$1';
+$route['pekerjaan/approve/(:any)'] = 'PekerjaanController/approve_pekerjaan/$1';
+$route['pekerjaan/edit/(:any)'] = 'PekerjaanController/edit_pekerjaan/$1';
+
+// $route['proyek/neraca/selected'] = 'kegiatan/index/neraca';
+// $route['kegiatan/neraca/selected/(:any)'] = 'kegiatan/index/neraca/$1';

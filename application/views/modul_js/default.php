@@ -118,6 +118,14 @@
 			"paging": true,
 			"autoWidth": true
 		});
+		$('#dataTable-proyek').DataTable({
+			"paging": true,
+			"lengthChange": false,
+			"searching": true,
+			"ordering": true,
+			"info": false,
+			"autoWidth": true
+		});
 
 		//Date range picker
 		$('.reservationdate').datetimepicker({
@@ -177,34 +185,32 @@
 
 <!-- Untuk Alert Confirm Form Button -->
 <script>
-	document.querySelectorAll('.confirm-btn').forEach(button => {
-		button.addEventListener('click', function(event) {
-			event.preventDefault();
+	$(document).on('click', '.confirm-btn', function(event) {
+		event.preventDefault();
 
-			let form = button.closest('form');
-			let isValid = form.checkValidity(); // Memeriksa validitas form
+		let form = $(this).closest('form')[0];
+		let isValid = form.checkValidity(); // Memeriksa validitas form
 
-			if (!isValid) {
-				form.reportValidity();
-				return;
+		if (!isValid) {
+			form.reportValidity();
+			return;
+		}
+
+		let message = $(form).data('confirm-message') || "Apakah Anda yakin ingin mengirimkan form ini?";
+
+		Swal.fire({
+			title: 'Konfirmasi',
+			text: message,
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Ya, kirim!',
+			cancelButtonText: 'Batal'
+		}).then((result) => {
+			if (result.value) {
+				form.submit();
 			}
-
-			let message = form.getAttribute('data-confirm-message') || "Apakah Anda yakin ingin mengirimkan form ini?";
-
-			Swal.fire({
-				title: 'Konfirmasi',
-				text: message,
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Ya, kirim!',
-				cancelButtonText: 'Batal'
-			}).then((result) => {
-				if (result.value) {
-					form.submit();
-				}
-			});
 		});
 	});
 </script>

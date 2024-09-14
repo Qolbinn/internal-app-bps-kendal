@@ -134,6 +134,7 @@ class ProyekController extends CI_Controller
                     $this->proyek->delete_data($id_proyek); // Hapus proyek yang sudah ditambahkan
                     $this->session->set_flashdata('warning', validation_errors());
                     redirect($_SERVER['HTTP_REFERER']);
+                    return;
                 }
 
                 $id_master_kegiatan = $this->input->post('master_kegiatan-' . $index);
@@ -162,6 +163,27 @@ class ProyekController extends CI_Controller
             $this->session->set_flashdata('success', 'Proyek berhasil ditambahkan');
         } else {
             $this->session->set_flashdata('warning', 'Proyek gagal ditambahkan');
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function get_data_proyek_by_id($id)
+    {
+        $data = $this->proyek->get_by_id($id);
+        if ($data) {
+            echo json_encode($data);
+        } else {
+            $this->session->set_flashdata('warning', 'Gagal mengambil data proyek');
+        }
+    }
+
+    public function delete_proyek($id_proyek)
+    {
+        if ($this->proyek->delete_data($id_proyek)) {
+            $this->session->set_flashdata('success', 'Proyek berhasil dihapus');
+        } else {
+            $this->session->set_flashdata('warning', 'Proyek gagal dihapus');
         }
 
         redirect($_SERVER['HTTP_REFERER']);

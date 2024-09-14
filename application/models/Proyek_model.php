@@ -51,4 +51,10 @@ class Proyek_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->delete('proyek_tim');
     }
+
+    public function get_by_id($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->get('proyek_tim')->row();
+    }
 }

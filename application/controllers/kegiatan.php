@@ -45,6 +45,8 @@ class kegiatan extends CI_Controller
 		$this->load->model('User_model', 'user');
 		$this->load->model('MasterProyek_model', 'master_proyek');
 		$this->load->model('MasterKegiatan_model', 'master_kegiatan');
+		$this->load->model('MasterSatuan_model', 'master_satuan');
+		$this->load->model('IndikatorKinerja_model', 'indikator_kinerja');
 	}
 
 	public function load_table()
@@ -110,8 +112,6 @@ class kegiatan extends CI_Controller
 		$id_bidang = $this->bidang->get_id_by_name($nama_fungsi);
 		$data['dt_tim'] = $this->tim->get_by_bidang($id_bidang);
 		$data['bidang'] = $nama_fungsi;
-		$data['master_proyek'] = $this->master_proyek->get_data_by_bidang($nama_fungsi);
-		$data['master_kegiatan'] = $this->master_kegiatan->get_data();
 
 		// Jika ada parameter nama_tim
 		if ($nama_tim) {
@@ -121,7 +121,18 @@ class kegiatan extends CI_Controller
 			$data['ketua_tim'] = $this->user_role->get_ketua_tim($id_tim);
 			$data['anggota_tim'] = $this->user_role->get_list_anggota_tim($id_tim);
 			$data['new_anggota'] = $this->user_role->get_list_non_anggota_tim($id_tim);
+			$data['pegawai'] = $this->user->get_data();
+			$data['master_proyek'] = $this->master_proyek->get_data_by_bidang($nama_fungsi);
+			$data['master_kegiatan'] = $this->master_kegiatan->get_data();
+			$data['master_satuan'] = $this->master_satuan->get_data();
+			$data['indikator_kinerja'] = $this->indikator_kinerja->get_data();
 			$data['dt_proyek'] = $this->proyek->get_proyek_tim($id_tim);
+
+			$this->session->set_userdata([
+				'anggota_tim' => $data['anggota_tim'],
+				'master_kegiatan' => $data['master_kegiatan'],
+				'master_satuan' => $data['master_satuan']
+			]);
 		}
 
 		// Masukkan Script Tambahan
@@ -137,14 +148,20 @@ class kegiatan extends CI_Controller
 			$id_proyek = $this->input->post('id_proyek');
 
 			// Fetch kegiatan based on id_proyek
+			// $this->session->set_userdata('id_proyek_selected', $id_proyek);
+			$data['id_proyek_selected'] = $id_proyek;
 			$data['dt_kegiatan'] = $this->kegiatan_proyek->get_kegiatan_by_proyek($id_proyek);
+			$data['indikator_kinerja'] = $this->indikator_kinerja->get_data();
 
 			// Load the view and send the data
 			$this->load->view('modul/kegiatan/kegiatan-table', $data);
+			// echo json_encode($dt_kegiatan);
 		} else {
 			show_error('Akses tidak diizinkan', 403);
 		}
 	}
+
+
 
 	public function get_pekerjaan_by_kegiatan()
 	{
@@ -152,6 +169,7 @@ class kegiatan extends CI_Controller
 			$id_kegiatan = $this->input->post('id_kegiatan');
 
 			// Fetch kegiatan based on id_proyek
+			$data['id_kegiatan_selected'] = $id_kegiatan;
 			$data['dt_pekerjaan'] = $this->pekerjaan->get_pekerjaan_by_kegiatan($id_kegiatan);
 
 			// Load the view and send the data

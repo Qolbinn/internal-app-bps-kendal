@@ -23,7 +23,19 @@ class KegiatanProyek_model extends CI_Model
 
     public function get_kegiatan_by_proyek($id_proyek)
     {
-        $query = $this->db->get_where('kegiatan_proyek', array('id_proyek' => $id_proyek));
+        // $query = $this->db->get_where('kegiatan_proyek', array('id_proyek' => $id_proyek));
+
+        // if ($query->num_rows() > 0) {
+        //     return $query->result();
+        // } else {
+        //     return null;
+        // }
+        $this->db->select('kegiatan_proyek.*, master_kegiatan.nama_kegiatan');
+        $this->db->from('kegiatan_proyek');
+        $this->db->join('master_kegiatan', 'master_kegiatan.id = kegiatan_proyek.id_master_kegiatan');
+        $this->db->where('kegiatan_proyek.id_proyek', $id_proyek);
+
+        $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -35,7 +47,11 @@ class KegiatanProyek_model extends CI_Model
 
     public function insert_data($data)
     {
-        return $this->db->insert('kegiatan_proyek', $data);
+        if ($this->db->insert('kegiatan_proyek', $data)) {
+            return $this->db->insert_id();
+        } else {
+            return null;
+        }
     }
 
     public function update_data($id, $data)

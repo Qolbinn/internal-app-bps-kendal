@@ -38,8 +38,12 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item" id="breadcrumb-proyek">Proyek</li>
             <li class="breadcrumb-item" id="breadcrumb-bidang"><?php echo $tim_selected->nama_tim ?></li>
-            <li class="breadcrumb-item active" id="breadcrumb-nama-proyek" style="display: none;"></li>
-            <li class="breadcrumb-item active" id="breadcrumb-nama-kegiatan" style="display: none;"></li>
+            <li class="breadcrumb-item active" id="breadcrumb-nama-proyek" style="display: none;">
+                <!-- <?php echo $nama_proyek_selected ?? "proyek tidak terambil"; ?> -->
+            </li>
+            <li class="breadcrumb-item active" id="breadcrumb-nama-kegiatan" style="display: none;">
+                <!-- <?php echo $nama_kegiatan_selected ?? "kegiatan tidak terambil"; ?> -->
+            </li>
         </ol>
 
         <!-- Div untuk memuat tabel -->
@@ -52,15 +56,17 @@
             </div>
             <div class="kegiatan-table" style="display: none;">
                 <?php
-                include 'kegiatan-table.php';
+                // include 'kegiatan-table.php';
                 ?>
             </div>
             <div class="pekerjaan-table" style="display: none;">
                 <?php
-                include 'pekerjaan-table.php';
+                // include 'pekerjaan-table.php';
                 ?>
             </div>
         </div>
+
+
 
     </div>
 
